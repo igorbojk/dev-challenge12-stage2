@@ -1,27 +1,31 @@
 <template>
   <div id="app">
+    <main-menu></main-menu>
     <main-map></main-map>
+    <aside-menu></aside-menu>
+
   </div>
 </template>
 
 <script>
 import MainMap from './components/main-map.vue';
-
+import AsideMenu from './components/aside-menu.vue';
+import MainMenu from './components/main-menu.vue';
 export default {
 
   name: 'app',
   components: {
-    MainMap
+    MainMenu,
+    MainMap,
+    AsideMenu
   }
 }
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  display: flex;
+  height: 100vh;
+  position: relative;
 }
 </style>

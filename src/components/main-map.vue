@@ -16,6 +16,11 @@
           @click="center=m.position"
         /> -->
     </GmapMap>
+    <b-modal ref="markerModal" hide-footer title="Using Component Methods">
+      <div class="d-block text-center">
+        <h3>Hello From My Modal!</h3>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -31,8 +36,17 @@ Vue.use(VueGoogleMaps, {
 })
 export default {
   name: 'main-map',
+   computed: {
+      isCanAddMarker() {
+          return this.$store.state.isCanAddMarker;
+      },
+  },
   methods: {
     geolocation : function(event) {
+      if(!this.isCanAddMarker){
+        return;
+      }
+      this.$refs.markerModal.show()
       console.log(event.latLng.lat());
       console.log(event.latLng.lng())
     }
@@ -44,6 +58,7 @@ export default {
 <style lang="scss">
 .map-container{
   height: 100vh;
+  width: 100%;
 }
 
 </style>
