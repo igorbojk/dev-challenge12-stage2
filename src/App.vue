@@ -27,5 +27,8 @@ export default {
   display: flex;
   height: 100vh;
   position: relative;
+  .btn:disabled{
+    opacity: 0.2;
+  }
 }
 </style>

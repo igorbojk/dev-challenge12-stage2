@@ -9,23 +9,13 @@
       >
         <GmapMarker
           :key="index"
-          v-for="(m, index) in markers"
-          :position="m.position"
+          v-for="(marker, index) in markers"
+          :position="marker.position"
           :clickable="true"
-          @click="center=m.position"
+          @click="setCurrentMarker(marker)"
+          :icon="marker.icon"
         />
     </GmapMap>
-    <b-modal ref="markerModal" hide-footer  hide-header-close title="Using Component Methods">
-      <div class="d-block text-center">
-        <h3>Hello From My Modal!</h3>
-        <div v-if="currentMarker">
-          <p>Локация: </p>
-          <p>{{currentMarker.position.lat}}</p>
-          <p>{{currentMarker.position.lng}}</p>
-        </div>
-        <b-btn class="mt-3" variant="outline-danger" block @click="hideModal">Close Me</b-btn>
-      </div>
-    </b-modal>
   </div>
 </template>
 
@@ -45,34 +35,32 @@ export default {
       isCanAddMarker() {
           return this.$store.state.isCanAddMarker;
       },
+      markers() {
+        return this.$store.state.markers;
+      }
   },
   methods: {
     geolocation(event) {
       if(!this.isCanAddMarker){
         return;
       }
-      this.currentMarker = {
-        id: '_' + Math.random().toString(36).substr(2, 9),
-        position: {
-          lat: event.latLng.lat(),
-          lng: event.latLng.lng()
-        }
+      const markerPosition = {
+        lat: event.latLng.lat(),
+        lng: event.latLng.lng()
       }
-      this.markers.push(this.currentMarker);
-      this.$refs.markerModal.show()
-      console.log(event.latLng.lat());
-      console.log(event.latLng.lng())
+      this.$store.dispatch('addNewMarker', markerPosition);
     },
-    hideModal() {
-      this.markers = this.markers.filter(i => i.id !== this.currentMarker.id);
-      this.$store.dispatch('toggleAddMarker');
-      this.$refs.markerModal.hide();
+    setCurrentMarker(marker){
+      if(this.isCanAddMarker){
+        return;
+      }
+      this.center = marker.position;
+      this.$store.dispatch('setCurrentMarker', marker);
+      this.$store.dispatch('openAside');
     }
   },
   data(){
     return {
-      markers: [],
-      currentMarker: null,
       center: {lat:50.412739882464216, lng:30.53206800636599}
     }
   }
