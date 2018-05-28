@@ -82,6 +82,10 @@ export const store = new Vuex.Store({
         },
         applyMarkersFilter(state, filters){
             state.filteredMarkers = filter(state.markers, filters);
+        },
+        deleteMarker(state) {
+            state.markers = state.markers.filter(i => i.id !== state.currentMarker.id);
+            state.filteredMarkers = state.filteredMarkers.filter(i => i.id !== state.currentMarker.id);
         }
     },
     actions: {
@@ -117,6 +121,10 @@ export const store = new Vuex.Store({
         },
         applyMarkersFilter({commit}, filters){
             commit('applyMarkersFilter', filters);
+        },
+        deleteMarker({commit}){
+            commit('deleteMarker');
+            commit('closeAside');
         }
     },
 });

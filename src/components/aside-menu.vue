@@ -42,7 +42,6 @@
         <div class="aside-footer">
             <button type="submit" class="btn btn-outline-primary btn-block" >Зберегти</button>
             <button type="button" class="btn btn-outline-danger btn-block" @click="cancel()">Скасувати</button>
-            
         </div>
       </b-form>
       <div class="flex-container" v-if="asideMode == 'view'">
@@ -66,9 +65,12 @@
                 <div class="mb-3">
                     {{currentMarker.contactInfo}}
                 </div>
-                
         </div>
         <div class="aside-footer">
+          <button type="button" class="btn btn-outline-dark btn-block" @click="deleteMarker()">
+            <span v-if="currentMarker.type == 'lost'">Тварина знайдена</span>
+            <span v-if="currentMarker.type == 'find'">Власника знайдено</span>
+          </button>
           <button type="button" class="btn btn-outline-danger btn-block" @click="close()">Закрити</button>
         </div>
       </div>
@@ -110,6 +112,9 @@
                 this.$store.dispatch('diactivateMarkerAdding');
                 this.$store.dispatch('closeAside');
                 Object.keys(this.markerOptions).forEach(i => this.markerOptions[i] = null);
+            },
+            deleteMarker(){
+              this.$store.dispatch('deleteMarker');
             }
         },
         data() {
@@ -143,7 +148,6 @@
         z-index: 997;
         transition: right .3s;
         box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, .2);
-        padding: 8px;
         &.active {
             right: 0;
         }
@@ -153,15 +157,20 @@
           justify-content: space-between;
           height: 100%;
         }
+        &-header{
+              padding: 8px;
+        }
         &-body{
             flex: 1 1 auto;
             overflow: auto;
+              padding: 8px;
             .animal-photo{
                 width: 100%;
                 height: auto;
             }
         }
         &-footer{
+            padding: 0 8px;
             button{
                 margin: 8px 0;
             }
