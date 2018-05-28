@@ -1,11 +1,12 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-
+var filter = require('lodash.filter');
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
     state: {
         markers: [],
+        filteredMarkers: [],
         currentMarker: null,
         isCanAddMarker: false,
         openAside: false,
@@ -31,6 +32,7 @@ export const store = new Vuex.Store({
                 lng: position.lng
             };
             state.markers.push(state.currentMarker);
+            state.filteredMarkers = state.markers;
             state.asideMode = 'edit';
             state.openAside = true;
         },
@@ -55,6 +57,12 @@ export const store = new Vuex.Store({
         },
         setAsideMode(state, mode) {
             state.asideMode = mode;
+        },
+        setMarkers(state) {
+            state.filteredMarkers = state.markers;
+        },
+        applyMarkersFilter(state, filters){
+            state.filteredMarkers = filter(state.markers, filters);
         }
     },
     actions: {
@@ -84,6 +92,12 @@ export const store = new Vuex.Store({
         },
         setAsideMode({commit}, mode) {
             commit('setAsideMode', mode);
+        },
+        setMarkers({commit}) {
+            commit('setMarkers');
+        },
+        applyMarkersFilter({commit}, filters){
+            commit('applyMarkersFilter', filters);
         }
     },
 });

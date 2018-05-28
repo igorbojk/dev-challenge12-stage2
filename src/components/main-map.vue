@@ -36,7 +36,7 @@
                 return this.$store.state.isCanAddMarker;
             },
             markers() {
-                return this.$store.state.markers;
+                return this.$store.state.filteredMarkers;
             }
         },
         methods: {
@@ -64,6 +64,9 @@
             return {
                 center: {lat: 50.412739882464216, lng: 30.53206800636599}
             }
+        },
+        mounted() {
+            this.$store.dispatch('setMarkers');
         }
 
     }
