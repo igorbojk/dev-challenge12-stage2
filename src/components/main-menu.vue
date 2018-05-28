@@ -3,7 +3,10 @@
         <div class="action-title">
             Додати маркер
         </div>
-        <div class="action-buttons">
+        <button type="button" class="btn btn-outline-danger btn-block" @click="diactivateMarkerAdding()"
+                    v-if="isShowCancel()">Скасувати
+            </button>
+        <div class="action-buttons" v-if="isShowActionsButton()">
             <button type="button" class="btn btn-outline-danger " @click="activateMarkerAdding('lost')"
                     :disabled="isCanAddMarker">Загублено
             </button>
@@ -43,8 +46,8 @@
                     </option>
                 </b-form-select>
                 <div class="action-buttons">
-                	<button type="button" class="btn btn-danger" @click="unsetFilters()">Скинути</button>
-            		<button type="button" class="btn btn-primary" @click="applyMarkersFilter()">Застосувати</button>
+                	<button type="button" class="btn btn-danger" @click="unsetFilters()" :disabled="isCanAddMarker">Скинути</button>
+            		<button type="button" class="btn btn-primary" @click="applyMarkersFilter()" :disabled="isCanAddMarker">Застосувати</button>
                 </div>
         
         </div>
@@ -62,9 +65,18 @@
         computed: {
             isCanAddMarker() {
                 return this.$store.state.isCanAddMarker;
+            },
+            asideMode(){
+            	return this.$store.state.asideMode;
             }
         },
         methods: {
+        	isShowCancel(){
+        		return this.isCanAddMarker && !this.asideMode;
+        	},
+        	isShowActionsButton(){
+        		return !this.isCanAddMarker || this.asideMode;
+        	},
             activateMarkerAdding(type) {
                 this.$store.dispatch('activateMarkerAdding', type);
             },
@@ -82,6 +94,9 @@
                     this.filters[i] = null
                 });
                 this.$store.dispatch('applyMarkersFilter', {});
+            },
+            diactivateMarkerAdding(){
+            	this.$store.dispatch('diactivateMarkerAdding');
             }
         },
         data() {
@@ -96,7 +111,7 @@
                     age: null,
                     animalBreed: null,
                     color: null
-                }
+                }                
             }
         }
     }

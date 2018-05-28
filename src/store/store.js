@@ -73,6 +73,7 @@ export const store = new Vuex.Store({
         },
         cancelMarkerAdding(state) {
             state.markers = state.markers.filter(i => i.id !== state.currentMarker.id);
+            state.filteredMarkers = state.filteredMarkers.filter(i => i.id !== state.currentMarker.id);
         },
         setAsideMode(state, mode) {
             state.asideMode = mode;
