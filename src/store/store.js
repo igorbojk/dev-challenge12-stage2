@@ -1,47 +1,60 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
     state: {
         markers: [],
         currentMarker: null,
-        currentMarkerType: null,
         isCanAddMarker: false,
-        openAside: false
+        openAside: false,
+        asideMode: null
     },
     mutations: {
-        activateMarkerAdding(state, type){
-            state.isCanAddMarker = true,
-            state.currentMarkerType = type;
-        },
-        diactivateMarkerAdding(state){
-            state.isCanAddMarker = false,
-            state.currentMarkerType = null;
-        },
-        addNewMarker(state, position) {
+        activateMarkerAdding(state, type) {
+            state.isCanAddMarker = true;
             state.currentMarker = {
                 id: '_' + Math.random().toString(36).substr(2, 9),
-                type: state.currentMarkerType,
-                position: {
-                  lat: position.lat,
-                  lng: position.lng
-                },
+                type: type,
                 icon: {
-                  url: `icons/${state.currentMarkerType}_icon.png`,
+                    url: `icons/${type}_icon.png`,
                 }
-              }
+            };
+        },
+        diactivateMarkerAdding(state) {
+            state.isCanAddMarker = false;
+        },
+        addNewMarker(state, position) {
+            state.currentMarker.position = {
+                lat: position.lat,
+                lng: position.lng
+            };
             state.markers.push(state.currentMarker);
+            state.asideMode = 'edit';
             state.openAside = true;
         },
         closeAside(state) {
             state.openAside = false;
+            state.currentMarker = null;
+            state.asideMode = null;
         },
         openAside(state) {
             state.openAside = true;
         },
-        setCurrentMarker(state, marker){
+        setCurrentMarker(state, marker) {
             state.currentMarker = marker;
+        },
+        saveMarker(state, markerOptions) {
+            const oldMarker = state.markers.find(i => i.id == state.currentMarker.id);
+            Object.assign(oldMarker, markerOptions);
+            state.currentMarker = null;
+        },
+        cancelMarkerAdding(state) {
+            state.markers = state.markers.filter(i => i.id !== state.currentMarker.id);
+        },
+        setAsideMode(state, mode) {
+            state.asideMode = mode;
         }
     },
     actions: {
@@ -62,6 +75,15 @@ export const store = new Vuex.Store({
         },
         setCurrentMarker({commit}, marker) {
             commit('setCurrentMarker', marker);
+        },
+        saveMarker({commit}, markerOptions) {
+            commit('saveMarker', markerOptions);
+        },
+        cancelMarkerAdding({commit}) {
+            commit('cancelMarkerAdding');
+        },
+        setAsideMode({commit}, mode) {
+            commit('setAsideMode', mode);
         }
     },
 });
