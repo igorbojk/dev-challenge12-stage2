@@ -1,25 +1,25 @@
 <template>
     <div class="aside" v-bind:class="{ active: openAside}">
+      <b-form @submit="saveMarker" class="flex-container" v-if="asideMode == 'edit'">
         <div class="aside-header" v-if="currentMarker">
             {{markerTypes[currentMarker.type]}}
         </div>
         <div class="aside-body">
-            <div v-if="asideMode == 'edit'">
-                <b-form-select v-model="markerOptions.animalType" class="mb-3">
+                <b-form-select v-model="markerOptions.animalType" class="mb-3" required>
                     <option :value="null">Оберіть вид тварини</option>
                     <option :value="animalType.value" v-for="(animalType, index) of animalTypes" :key="index">
                         {{animalType.text}}
                     </option>
                 </b-form-select>
-                <b-form-select v-model="markerOptions.animalBreed" class="mb-3">
+                <b-form-select v-model="markerOptions.animalBreed" class="mb-3" required>
                     <option :value="null">Оберіть породу тварини</option>
                     <option :value="animalBreed.value"
                             v-for="(animalBreed, index) of animalBreeds[markerOptions.animalType]" :key="index">
                         {{animalBreed.text}}
                     </option>
                 </b-form-select>
-                <b-form-input v-model="markerOptions.age" type="text" placeholder="Вік тварини" class="mb-3"></b-form-input>
-                <b-form-select v-model="markerOptions.color" class="mb-3">
+                <b-form-input v-model="markerOptions.age" type="text" placeholder="Вік тварини" class="mb-3" required></b-form-input>
+                <b-form-select v-model="markerOptions.color" class="mb-3" required>
                     <option :value="null">Оберіть колір тварини</option>
                     <option :value="animalColor.value"
                             v-for="(animalColor, index) of animalColors" :key="index">
@@ -31,13 +31,27 @@
                                  placeholder="Контактна інформация"
                                  :rows="3"
                                  :max-rows="6"
-                                 class="mb-3">
+                                 class="mb-3"
+                                 required>
                 </b-form-textarea>
-                <b-form-input v-model="markerOptions.photoUrl" type="text" placeholder="Фото тварини" class="mb-3"></b-form-input>
+                <b-form-input v-model="markerOptions.photoUrl" type="text" placeholder="Фото тварини" class="mb-3" required></b-form-input>
                 <img :src="markerOptions.photoUrl" alt="" class="animal-photo">
-            </div>
-            <div v-if="asideMode == 'view'">
-                <div class="mb-3">
+              
+                
+        </div>
+        <div class="aside-footer">
+            <button type="submit" class="btn btn-outline-primary btn-block" >Зберегти</button>
+            <button type="button" class="btn btn-outline-danger btn-block" @click="cancel()">Скасувати</button>
+            
+        </div>
+      </b-form>
+      <div class="flex-container" v-if="asideMode == 'view'">
+        <div class="aside-header" v-if="currentMarker">
+            {{markerTypes[currentMarker.type]}}
+        </div>
+        <div class="aside-body">
+          <img :src="currentMarker.photoUrl" alt="" class="animal-photo">
+          <div class="mb-3">
                     {{currentMarker.animalType}}
                 </div>
                 <div class="mb-3">
@@ -52,18 +66,12 @@
                 <div class="mb-3">
                     {{currentMarker.contactInfo}}
                 </div>
-                <img :src="currentMarker.photoUrl" alt="" class="animal-photo">
-            </div>
+                
         </div>
         <div class="aside-footer">
-            <div v-if="asideMode == 'edit'">
-                <button type="button" class="btn btn-outline-primary btn-block" @click="saveMarker()">Зберегти</button>
-                <button type="button" class="btn btn-outline-danger btn-block" @click="cancel()">Скасувати</button>
-            </div>
-            <div v-if="asideMode == 'view'">
-                <button type="button" class="btn btn-outline-danger btn-block" @click="close()">Закрити</button>
-            </div>
+          <button type="button" class="btn btn-outline-danger btn-block" @click="close()">Закрити</button>
         </div>
+      </div>
     </div>
 </template>
 
@@ -96,7 +104,8 @@
                 this.$store.dispatch('diactivateMarkerAdding');
                 this.$store.dispatch('closeAside');
             },
-            saveMarker() {
+            saveMarker(event) {
+                event.preventDefault();
                 this.$store.dispatch('saveMarker', this.markerOptions);
                 this.$store.dispatch('diactivateMarkerAdding');
                 this.$store.dispatch('closeAside');
@@ -135,14 +144,18 @@
         transition: right .3s;
         box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, .2);
         padding: 8px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
         &.active {
             right: 0;
         }
+        .flex-container{
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          height: 100%;
+        }
         &-body{
             flex: 1 1 auto;
+            overflow: auto;
             .animal-photo{
                 width: 100%;
                 height: auto;

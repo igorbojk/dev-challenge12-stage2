@@ -5,7 +5,25 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
     state: {
-        markers: [],
+        markers: [
+            {
+                type: 'lost',
+                age:"42",
+                animalBreed:"Australian Shepherd",
+                animalType:"dog",
+                color:"red",
+                contactInfo:"2212",
+                icon: {
+                    url:"icons/lost_icon.png"
+                },
+                id:"_wwkq11fcj",
+                photoUrl:"https://s00.yaplakal.com/pics/pics_original/4/5/5/11106554.jpg",
+                position: {
+                    lat:50.98681178914668,
+                    lng:31.64168714699099
+                }
+            }
+        ],
         filteredMarkers: [],
         currentMarker: null,
         isCanAddMarker: false,
@@ -14,6 +32,7 @@ export const store = new Vuex.Store({
     },
     mutations: {
         activateMarkerAdding(state, type) {
+            state.openAside = false;
             state.isCanAddMarker = true;
             state.currentMarker = {
                 id: '_' + Math.random().toString(36).substr(2, 9),
