@@ -13,6 +13,7 @@
     "node-sass": "^4.9.0",
     "sass-loader": "^7.0.1",
     "vue": "^2.5.16",
+    "vue-ls": "^3.0.5",
     "vue2-google-maps": "^0.9.7",
     "vuex": "^3.0.1"
   },

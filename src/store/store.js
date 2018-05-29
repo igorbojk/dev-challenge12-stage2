@@ -1,29 +1,37 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import VueLocalStorage from 'vue-ls';
 var filter = require('lodash.filter');
 Vue.use(Vuex);
 
+const options = {
+    namespace: 'dev_challenge__'
+};
+
+Vue.use(VueLocalStorage, options);
+
+const defaultData = [
+    {
+        type: 'lost',
+        age:"42",
+        animalBreed:"Australian Shepherd",
+        animalType:"dog",
+        color:"red",
+        contactInfo:"2212",
+        icon: {
+            url:"icons/lost_icon.png"
+        },
+        id:"_wwkq11fcj",
+        photoUrl:"https://s00.yaplakal.com/pics/pics_original/4/5/5/11106554.jpg",
+        position: {
+            lat:50.98681178914668,
+            lng:31.64168714699099
+        }
+    }
+];
 export const store = new Vuex.Store({
     state: {
-        markers: [
-            {
-                type: 'lost',
-                age:"42",
-                animalBreed:"Australian Shepherd",
-                animalType:"dog",
-                color:"red",
-                contactInfo:"2212",
-                icon: {
-                    url:"icons/lost_icon.png"
-                },
-                id:"_wwkq11fcj",
-                photoUrl:"https://s00.yaplakal.com/pics/pics_original/4/5/5/11106554.jpg",
-                position: {
-                    lat:50.98681178914668,
-                    lng:31.64168714699099
-                }
-            }
-        ],
+        markers: [],
         filteredMarkers: [],
         currentMarker: null,
         isCanAddMarker: false,
@@ -71,6 +79,7 @@ export const store = new Vuex.Store({
             const oldMarker = state.markers.find(i => i.id == state.currentMarker.id);
             Object.assign(oldMarker, markerOptions);
             state.currentMarker = null;
+
         },
         cancelMarkerAdding(state) {
             state.markers = state.markers.filter(i => i.id !== state.currentMarker.id);
@@ -88,6 +97,15 @@ export const store = new Vuex.Store({
         deleteMarker(state) {
             state.markers = state.markers.filter(i => i.id !== state.currentMarker.id);
             state.filteredMarkers = state.filteredMarkers.filter(i => i.id !== state.currentMarker.id);
+        },
+        getData(store) {
+            if(!Vue.ls.get('data')){
+                Vue.ls.set('data', defaultData);
+            }
+            store.markers = Vue.ls.get('data');
+        },
+        saveData(store) {
+            Vue.ls.set('data', store.markers);
         }
     },
     actions: {
@@ -111,6 +129,7 @@ export const store = new Vuex.Store({
         },
         saveMarker({commit}, markerOptions) {
             commit('saveMarker', markerOptions);
+            commit('saveData');
         },
         cancelMarkerAdding({commit}) {
             commit('cancelMarkerAdding');
@@ -126,7 +145,14 @@ export const store = new Vuex.Store({
         },
         deleteMarker({commit}){
             commit('deleteMarker');
+            commit('saveData');
             commit('closeAside');
+        },
+        getData({commit}){
+            commit('getData');
+        },
+        setData({commit}){
+            commit('saveData');
         }
     },
 });

@@ -2,7 +2,7 @@
     <div class="aside" v-bind:class="{ active: openAside}">
         <b-form @submit="saveMarker" class="flex-container" v-if="asideMode == 'edit'">
             <div class="aside-header" v-if="currentMarker">
-                {{markerTypes[currentMarker.type]}}
+                {{TRANSLATES.MARKER_TYPES[currentMarker.type]}}
             </div>
             <div class="aside-body">
                 <b-form-select v-model="markerOptions.animalType" class="mb-3" required>
@@ -48,28 +48,33 @@
         </b-form>
         <div class="flex-container" v-if="asideMode == 'view'">
             <div class="aside-header" v-if="currentMarker">
-                {{markerTypes[currentMarker.type]}}
+                {{TRANSLATES.MARKER_TYPES[currentMarker.type]}} !
             </div>
             <div class="aside-body">
                 <img :src="currentMarker.photoUrl" alt="" class="animal-photo">
                 <div class="mb-3">
-                    {{currentMarker.animalType}}
+                    <div class="label">Вид тварини</div>
+                    {{TRANSLATES.ANIMAL_TYPES[currentMarker.animalType]}}
                 </div>
                 <div class="mb-3">
-                    {{currentMarker.animalBreed}}
+                    <div class="label">Порода тварини</div>
+                     {{TRANSLATES.DOG_BREEDS[currentMarker.animalBreed]}}
                 </div>
                 <div class="mb-3">
+                    <div class="label">Вік тварини</div>
                     {{currentMarker.age}}
                 </div>
                 <div class="mb-3">
-                    {{currentMarker.color}}
+                    <div class="label">Колір тварини</div>
+                    {{TRANSLATES.COLORS[currentMarker.color]}}
                 </div>
                 <div class="mb-3">
+                    <div class="label">Контактна інформація</div>
                     {{currentMarker.contactInfo}}
                 </div>
             </div>
             <div class="aside-footer">
-                <button type="button" class="btn btn-outline-dark btn-block" @click="deleteMarker()">
+                <button type="button" class="btn btn-outline-dark btn-block" @click="deleteMarker()" v-b-popover.hover="'Натисніть, якщо знайдено власника або тварину'">
                     <span v-if="currentMarker.type == 'lost'">Тварина знайдена</span>
                     <span v-if="currentMarker.type == 'find'">Власника знайдено</span>
                 </button>
@@ -80,10 +85,11 @@
 </template>
 
 <script>
-    import {MARKER_TYPES} from '../const/translates.js';
+    import {TRANSLATES} from '../const/translates.js';
     import {ANIMAL_TYPES} from '../const/animalTypes.js';
     import {ANIMAL_BREEDS} from '../const/animalBreeds.js';
     import {ANIMAL_COLORS} from '../const/animalColors.js';
+
 
     export default {
         name: 'aside-menu',
@@ -121,7 +127,7 @@
         },
         data() {
             return {
-                markerTypes: MARKER_TYPES,
+                TRANSLATES: TRANSLATES,
                 animalTypes: ANIMAL_TYPES,
                 animalBreeds: ANIMAL_BREEDS,
                 animalColors: ANIMAL_COLORS,
@@ -150,6 +156,11 @@
         z-index: 997;
         transition: right .3s;
         box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, .2);
+        .label{
+            color: gray;
+            font-size: 12px;
+            margin-bottom: 2px;
+        }
         &.active {
             right: 0;
         }
@@ -161,6 +172,10 @@
         }
         &-header {
             padding: 8px;
+            text-align: center;
+            font-size: 24px;
+            color: #dc3545;
+            font-weight: bold;
         }
         &-body {
             flex: 1 1 auto;
@@ -169,6 +184,7 @@
             .animal-photo {
                 width: 100%;
                 height: auto;
+                margin-bottom: 8px;
             }
         }
         &-footer {

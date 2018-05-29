@@ -8,37 +8,37 @@
         </button>
         <div class="action-buttons" v-if="isShowActionsButton()">
             <button type="button" class="btn btn-outline-danger " @click="activateMarkerAdding('lost')"
-                    :disabled="isCanAddMarker">Загублено
+                    :disabled="isCanAddMarker" v-b-popover.hover="'Після натискання, клікніть на бажане місце на мапі щоб поставити маркер'">Загублено
             </button>
             <button type="button" class="btn btn-outline-dark " @click="activateMarkerAdding('find')"
-                    :disabled="isCanAddMarker">Знайдено
+                    :disabled="isCanAddMarker" v-b-popover.hover="'Після натискання, клікніть на бажане місце на мапі щоб поставити маркер'">Знайдено
             </button>
         </div>
         <div class="filters-block">
             <div class="action-title">
                 Фільтрувати
             </div>
-            <b-form-select v-model="filters.type" class="mb-3">
+            <b-form-select v-model="filters.type" class="mb-3" v-b-popover.hover="'Фільтрувати по типу маркера'">
                 <option :value="null">Оберіть тип маркеру</option>
                 <option :value="markerType.value" v-for="(markerType, index) of markerTypes" :key="index">
                     {{markerType.text}}
                 </option>
             </b-form-select>
-            <b-form-select v-model="filters.animalType" class="mb-3">
+            <b-form-select v-model="filters.animalType" class="mb-3" v-b-popover.hover="'Фільтрувати по виду тварини'">
                 <option :value="null">Оберіть вид тварини</option>
                 <option :value="animalType.value" v-for="(animalType, index) of animalTypes" :key="index">
                     {{animalType.text}}
                 </option>
             </b-form-select>
-            <b-form-select v-model="filters.animalBreed" class="mb-3">
+            <b-form-select v-model="filters.animalBreed" class="mb-3" v-b-popover.hover="'Фільтрувати по попроді тварини'">
                 <option :value="null">Оберіть породу тварини</option>
                 <option :value="animalBreed.value"
                         v-for="(animalBreed, index) of animalBreeds[filters.animalType]" :key="index">
                     {{animalBreed.text}}
                 </option>
             </b-form-select>
-            <b-form-input v-model="filters.age" type="text" placeholder="Вік тварини" class="mb-3"></b-form-input>
-            <b-form-select v-model="filters.color" class="mb-3">
+            <b-form-input v-model="filters.age" type="text" placeholder="Вік тварини" class="mb-3" v-b-popover.hover="'Фільтрувати по віку тварини'" ></b-form-input>
+            <b-form-select v-model="filters.color" class="mb-3" v-b-popover.hover="'Фільтрувати по кольору тварини'">
                 <option :value="null">Оберіть колір тварини</option>
                 <option :value="animalColor.value"
                         v-for="(animalColor, index) of animalColors" :key="index">
@@ -46,10 +46,10 @@
                 </option>
             </b-form-select>
             <div class="action-buttons">
-                <button type="button" class="btn btn-danger" @click="unsetFilters()" :disabled="isCanAddMarker">
+                <button type="button" class="btn btn-danger" @click="unsetFilters()" :disabled="isCanAddMarker" v-b-popover.hover="'скинути всі фільтри'">
                     Скинути
                 </button>
-                <button type="button" class="btn btn-primary" @click="applyMarkersFilter()" :disabled="isCanAddMarker">
+                <button type="button" class="btn btn-primary" @click="applyMarkersFilter()" :disabled="isCanAddMarker" v-b-popover.hover="'Застосувати вибрані фільтри'">
                     Застосувати
                 </button>
             </div>

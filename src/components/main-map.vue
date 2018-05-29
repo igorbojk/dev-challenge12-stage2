@@ -15,10 +15,10 @@
                     @click="setCurrentMarker(marker)"
                     :icon="marker.icon"
             />
-            <GmapCircle
-                :center="center"
-                :radius="5000"
-            />
+            <!--<GmapCircle-->
+                <!--:center="center"-->
+                <!--:radius="5000"-->
+            <!--/>-->
         </GmapMap>
     </div>
 </template>
@@ -41,7 +41,8 @@
             },
             markers() {
                 return this.$store.state.filteredMarkers;
-            }
+            },
+
         },
         methods: {
             geolocation(event) {
@@ -70,6 +71,7 @@
             }
         },
         mounted() {
+            this.$store.dispatch('getData');
             this.$store.dispatch('setMarkers');
         }
 
