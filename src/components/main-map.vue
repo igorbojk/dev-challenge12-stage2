@@ -15,6 +15,10 @@
                     @click="setCurrentMarker(marker)"
                     :icon="marker.icon"
             />
+            <GmapCircle
+                :center="center"
+                :radius="5000"
+            />
         </GmapMap>
     </div>
 </template>
@@ -58,7 +62,7 @@
                 this.$store.dispatch('setCurrentMarker', marker);
                 this.$store.dispatch('setAsideMode', 'view');
                 this.$store.dispatch('openAside');
-            }
+            },
         },
         data() {
             return {

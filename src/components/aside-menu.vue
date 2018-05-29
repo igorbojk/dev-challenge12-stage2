@@ -1,10 +1,10 @@
 <template>
     <div class="aside" v-bind:class="{ active: openAside}">
-      <b-form @submit="saveMarker" class="flex-container" v-if="asideMode == 'edit'">
-        <div class="aside-header" v-if="currentMarker">
-            {{markerTypes[currentMarker.type]}}
-        </div>
-        <div class="aside-body">
+        <b-form @submit="saveMarker" class="flex-container" v-if="asideMode == 'edit'">
+            <div class="aside-header" v-if="currentMarker">
+                {{markerTypes[currentMarker.type]}}
+            </div>
+            <div class="aside-body">
                 <b-form-select v-model="markerOptions.animalType" class="mb-3" required>
                     <option :value="null">Оберіть вид тварини</option>
                     <option :value="animalType.value" v-for="(animalType, index) of animalTypes" :key="index">
@@ -18,7 +18,8 @@
                         {{animalBreed.text}}
                     </option>
                 </b-form-select>
-                <b-form-input v-model="markerOptions.age" type="text" placeholder="Вік тварини" class="mb-3" required></b-form-input>
+                <b-form-input v-model="markerOptions.age" type="text" placeholder="Вік тварини" class="mb-3"
+                              required></b-form-input>
                 <b-form-select v-model="markerOptions.color" class="mb-3" required>
                     <option :value="null">Оберіть колір тварини</option>
                     <option :value="animalColor.value"
@@ -34,23 +35,24 @@
                                  class="mb-3"
                                  required>
                 </b-form-textarea>
-                <b-form-input v-model="markerOptions.photoUrl" type="text" placeholder="Фото тварини" class="mb-3" required></b-form-input>
+                <b-form-input v-model="markerOptions.photoUrl" type="text" placeholder="Фото тварини" class="mb-3"
+                              required></b-form-input>
                 <img :src="markerOptions.photoUrl" alt="" class="animal-photo">
-              
-                
-        </div>
-        <div class="aside-footer">
-            <button type="submit" class="btn btn-outline-primary btn-block" >Зберегти</button>
-            <button type="button" class="btn btn-outline-danger btn-block" @click="cancel()">Скасувати</button>
-        </div>
-      </b-form>
-      <div class="flex-container" v-if="asideMode == 'view'">
-        <div class="aside-header" v-if="currentMarker">
-            {{markerTypes[currentMarker.type]}}
-        </div>
-        <div class="aside-body">
-          <img :src="currentMarker.photoUrl" alt="" class="animal-photo">
-          <div class="mb-3">
+
+
+            </div>
+            <div class="aside-footer">
+                <button type="submit" class="btn btn-outline-primary btn-block">Зберегти</button>
+                <button type="button" class="btn btn-outline-danger btn-block" @click="cancel()">Скасувати</button>
+            </div>
+        </b-form>
+        <div class="flex-container" v-if="asideMode == 'view'">
+            <div class="aside-header" v-if="currentMarker">
+                {{markerTypes[currentMarker.type]}}
+            </div>
+            <div class="aside-body">
+                <img :src="currentMarker.photoUrl" alt="" class="animal-photo">
+                <div class="mb-3">
                     {{currentMarker.animalType}}
                 </div>
                 <div class="mb-3">
@@ -65,15 +67,15 @@
                 <div class="mb-3">
                     {{currentMarker.contactInfo}}
                 </div>
+            </div>
+            <div class="aside-footer">
+                <button type="button" class="btn btn-outline-dark btn-block" @click="deleteMarker()">
+                    <span v-if="currentMarker.type == 'lost'">Тварина знайдена</span>
+                    <span v-if="currentMarker.type == 'find'">Власника знайдено</span>
+                </button>
+                <button type="button" class="btn btn-outline-danger btn-block" @click="close()">Закрити</button>
+            </div>
         </div>
-        <div class="aside-footer">
-          <button type="button" class="btn btn-outline-dark btn-block" @click="deleteMarker()">
-            <span v-if="currentMarker.type == 'lost'">Тварина знайдена</span>
-            <span v-if="currentMarker.type == 'find'">Власника знайдено</span>
-          </button>
-          <button type="button" class="btn btn-outline-danger btn-block" @click="close()">Закрити</button>
-        </div>
-      </div>
     </div>
 </template>
 
@@ -102,7 +104,7 @@
                 this.$store.dispatch('diactivateMarkerAdding');
                 this.$store.dispatch('closeAside');
             },
-            close(){
+            close() {
                 this.$store.dispatch('diactivateMarkerAdding');
                 this.$store.dispatch('closeAside');
             },
@@ -113,8 +115,8 @@
                 this.$store.dispatch('closeAside');
                 Object.keys(this.markerOptions).forEach(i => this.markerOptions[i] = null);
             },
-            deleteMarker(){
-              this.$store.dispatch('deleteMarker');
+            deleteMarker() {
+                this.$store.dispatch('deleteMarker');
             }
         },
         data() {
@@ -151,27 +153,27 @@
         &.active {
             right: 0;
         }
-        .flex-container{
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          height: 100%;
+        .flex-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
         }
-        &-header{
-              padding: 8px;
+        &-header {
+            padding: 8px;
         }
-        &-body{
+        &-body {
             flex: 1 1 auto;
             overflow: auto;
-              padding: 8px;
-            .animal-photo{
+            padding: 8px;
+            .animal-photo {
                 width: 100%;
                 height: auto;
             }
         }
-        &-footer{
+        &-footer {
             padding: 0 8px;
-            button{
+            button {
                 margin: 8px 0;
             }
         }

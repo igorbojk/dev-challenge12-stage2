@@ -34,6 +34,7 @@ export const store = new Vuex.Store({
         activateMarkerAdding(state, type) {
             state.openAside = false;
             state.isCanAddMarker = true;
+            state.asideMode = null;
             state.currentMarker = {
                 id: '_' + Math.random().toString(36).substr(2, 9),
                 type: type,

@@ -4,8 +4,8 @@
             Додати маркер
         </div>
         <button type="button" class="btn btn-outline-danger btn-block" @click="diactivateMarkerAdding()"
-                    v-if="isShowCancel()">Скасувати
-            </button>
+                v-if="isShowCancel()">Скасувати
+        </button>
         <div class="action-buttons" v-if="isShowActionsButton()">
             <button type="button" class="btn btn-outline-danger " @click="activateMarkerAdding('lost')"
                     :disabled="isCanAddMarker">Загублено
@@ -31,25 +31,29 @@
                 </option>
             </b-form-select>
             <b-form-select v-model="filters.animalBreed" class="mb-3">
-                    <option :value="null">Оберіть породу тварини</option>
-                    <option :value="animalBreed.value"
-                            v-for="(animalBreed, index) of animalBreeds[filters.animalType]" :key="index">
-                        {{animalBreed.text}}
-                    </option>
-                </b-form-select>
+                <option :value="null">Оберіть породу тварини</option>
+                <option :value="animalBreed.value"
+                        v-for="(animalBreed, index) of animalBreeds[filters.animalType]" :key="index">
+                    {{animalBreed.text}}
+                </option>
+            </b-form-select>
             <b-form-input v-model="filters.age" type="text" placeholder="Вік тварини" class="mb-3"></b-form-input>
             <b-form-select v-model="filters.color" class="mb-3">
-                    <option :value="null">Оберіть колір тварини</option>
-                    <option :value="animalColor.value"
-                            v-for="(animalColor, index) of animalColors" :key="index">
-                        {{animalColor.text}}
-                    </option>
-                </b-form-select>
-                <div class="action-buttons">
-                	<button type="button" class="btn btn-danger" @click="unsetFilters()" :disabled="isCanAddMarker">Скинути</button>
-            		<button type="button" class="btn btn-primary" @click="applyMarkersFilter()" :disabled="isCanAddMarker">Застосувати</button>
-                </div>
-        
+                <option :value="null">Оберіть колір тварини</option>
+                <option :value="animalColor.value"
+                        v-for="(animalColor, index) of animalColors" :key="index">
+                    {{animalColor.text}}
+                </option>
+            </b-form-select>
+            <div class="action-buttons">
+                <button type="button" class="btn btn-danger" @click="unsetFilters()" :disabled="isCanAddMarker">
+                    Скинути
+                </button>
+                <button type="button" class="btn btn-primary" @click="applyMarkersFilter()" :disabled="isCanAddMarker">
+                    Застосувати
+                </button>
+            </div>
+
         </div>
 
     </div>
@@ -60,27 +64,28 @@
     import {ANIMAL_TYPES} from '../const/animalTypes.js';
     import {ANIMAL_BREEDS} from '../const/animalBreeds.js';
     import {ANIMAL_COLORS} from '../const/animalColors.js';
+
     export default {
         name: 'main-menu',
         computed: {
             isCanAddMarker() {
                 return this.$store.state.isCanAddMarker;
             },
-            asideMode(){
-            	return this.$store.state.asideMode;
+            asideMode() {
+                return this.$store.state.asideMode;
             }
         },
         methods: {
-        	isShowCancel(){
-        		return this.isCanAddMarker && !this.asideMode;
-        	},
-        	isShowActionsButton(){
-        		return !this.isCanAddMarker || this.asideMode;
-        	},
+            isShowCancel() {
+                return this.isCanAddMarker && !this.asideMode;
+            },
+            isShowActionsButton() {
+                return !this.isCanAddMarker || this.asideMode;
+            },
             activateMarkerAdding(type) {
                 this.$store.dispatch('activateMarkerAdding', type);
             },
-            applyMarkersFilter(){
+            applyMarkersFilter() {
                 const filter = Object.assign({}, this.filters);
                 Object.keys(filter).forEach(i => {
                     if (filter[i] == null) {
@@ -90,13 +95,13 @@
                 this.$store.dispatch('applyMarkersFilter', filter);
             },
             unsetFilters() {
-            	Object.keys(this.filters).forEach(i => {
+                Object.keys(this.filters).forEach(i => {
                     this.filters[i] = null
                 });
                 this.$store.dispatch('applyMarkersFilter', {});
             },
-            diactivateMarkerAdding(){
-            	this.$store.dispatch('diactivateMarkerAdding');
+            diactivateMarkerAdding() {
+                this.$store.dispatch('diactivateMarkerAdding');
             }
         },
         data() {
@@ -111,7 +116,7 @@
                     age: null,
                     animalBreed: null,
                     color: null
-                }                
+                }
             }
         }
     }
@@ -138,7 +143,7 @@
             display: flex;
             justify-content: space-between;
         }
-        .filters-block{
+        .filters-block {
             padding-top: 12px;
         }
     }
