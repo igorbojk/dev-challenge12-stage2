@@ -160,6 +160,9 @@
             markers() {
                 return this.$store.state.markers;
             },
+            filteredMarkers() {
+                return this.$store.state.filteredMarkers;
+            },
             circleTest() {
                 return this.$store.state.circle;
             },
@@ -183,6 +186,7 @@
                     }
                 });
                 this.$store.dispatch('applyMarkersFilter', filter);
+                this.$root.$emit('showToast', `Знайдено: ${this.filteredMarkers.length}`)
             },
             unsetFilters() {
                 Object.keys(this.filters).forEach(i => {
@@ -217,6 +221,7 @@
                     array: filteredRadiusArray,
                     filters: this.circleFilters
                 });
+                this.$root.$emit('showToast', `Знайдено: ${this.filteredMarkers.length}`)
             },
             resetAllFilters(){
                 this.$store.dispatch('resetAllFilters');

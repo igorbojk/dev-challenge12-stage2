@@ -17,9 +17,9 @@
                     :icon="marker.icon"
             />
             <GmapCircle
-                v-if="circle.center"
-                :center="circle.center"
-                :radius="circle.radius"
+                    v-if="circle.center"
+                    :center="circle.center"
+                    :radius="circle.radius"
             />
         </GmapMap>
     </div>
@@ -35,15 +35,12 @@
             markers() {
                 return this.$store.state.filteredMarkers;
             },
-            isCanAddCenter(){
+            isCanAddCenter() {
                 return this.$store.state.isCanAddCenter;
             },
-            circle(){
+            circle() {
                 return this.$store.state.circle;
             },
-            refs(){
-                return this.$refs;
-            }
         },
         methods: {
             geolocation(event) {
@@ -51,7 +48,7 @@
                     lat: event.latLng.lat(),
                     lng: event.latLng.lng()
                 };
-                if(this.isCanAddCenter) {
+                if (this.isCanAddCenter) {
                     this.$store.dispatch('addCircleCenter', markerPosition);
                     return;
                 }

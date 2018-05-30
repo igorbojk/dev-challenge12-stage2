@@ -4,14 +4,16 @@
         <main-map></main-map>
         <aside-menu></aside-menu>
         <marker-create-modal></marker-create-modal>
+        <toast-component></toast-component>
     </div>
 </template>
 
 <script>
-    import MainMap from './components/main-map.vue';
-    import AsideMenu from './components/aside-menu.vue';
-    import MainMenu from './components/main-menu.vue';
+    import MainMap from './components/main-map';
+    import AsideMenu from './components/aside-menu';
+    import MainMenu from './components/main-menu';
     import MarkerCreateModal from "./components/marker-create-modal";
+    import ToastComponent from "./components/toast-component"
 
     export default {
 
@@ -20,7 +22,8 @@
             MarkerCreateModal,
             MainMenu,
             MainMap,
-            AsideMenu
+            AsideMenu,
+            ToastComponent
         }
     }
 </script>
