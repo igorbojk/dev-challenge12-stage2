@@ -1,6 +1,7 @@
 <template>
     <div class="map-container">
         <GmapMap
+                ref="mapRef"
                 :center="center"
                 :zoom="7"
                 style="width: 100%; height: 100%"
@@ -15,24 +16,16 @@
                     @click="setCurrentMarker(marker)"
                     :icon="marker.icon"
             />
-            <!--<GmapCircle-->
-                <!--:center="center"-->
-                <!--:radius="5000"-->
-            <!--/>-->
+            <GmapCircle
+                v-if="circle.center"
+                :center="circle.center"
+                :radius="circle.radius"
+            />
         </GmapMap>
     </div>
 </template>
 
 <script>
-    import Vue from 'vue'
-    import * as VueGoogleMaps from 'vue2-google-maps'
-
-    Vue.use(VueGoogleMaps, {
-        load: {
-            key: 'AIzaSyDlpx51qYhOUmxAcMXLZo3adhxvdx1MRy4',
-            libraries: 'places',
-        },
-    })
     export default {
         name: 'main-map',
         computed: {
@@ -42,16 +35,25 @@
             markers() {
                 return this.$store.state.filteredMarkers;
             },
-
+            isCanAddCenter(){
+                return this.$store.state.isCanAddCenter;
+            },
+            circle(){
+                return this.$store.state.circle;
+            }
         },
         methods: {
             geolocation(event) {
-                if (!this.isCanAddMarker) {
-                    return;
-                }
                 const markerPosition = {
                     lat: event.latLng.lat(),
                     lng: event.latLng.lng()
+                };
+                if(this.isCanAddCenter) {
+                    this.$store.dispatch('addCircleCenter', markerPosition);
+                    return;
+                }
+                if (!this.isCanAddMarker) {
+                    return;
                 }
                 this.$store.dispatch('addNewMarker', markerPosition);
             },

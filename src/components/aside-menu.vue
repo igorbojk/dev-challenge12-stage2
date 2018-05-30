@@ -107,17 +107,17 @@
         methods: {
             cancel() {
                 this.$store.dispatch('cancelMarkerAdding');
-                this.$store.dispatch('diactivateMarkerAdding');
+                this.$store.dispatch('deactivateMarkerAdding');
                 this.$store.dispatch('closeAside');
             },
             close() {
-                this.$store.dispatch('diactivateMarkerAdding');
+                this.$store.dispatch('deactivateMarkerAdding');
                 this.$store.dispatch('closeAside');
             },
             saveMarker(event) {
                 event.preventDefault();
                 this.$store.dispatch('saveMarker', this.markerOptions);
-                this.$store.dispatch('diactivateMarkerAdding');
+                this.$store.dispatch('deactivateMarkerAdding');
                 this.$store.dispatch('closeAside');
                 Object.keys(this.markerOptions).forEach(i => this.markerOptions[i] = null);
             },

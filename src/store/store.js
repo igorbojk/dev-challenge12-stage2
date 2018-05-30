@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import VueLocalStorage from 'vue-ls';
+
 var filter = require('lodash.filter');
 Vue.use(Vuex);
 
@@ -10,22 +11,23 @@ const options = {
 
 Vue.use(VueLocalStorage, options);
 
+
 const defaultData = [
     {
         type: 'lost',
-        age:"42",
-        animalBreed:"Australian Shepherd",
-        animalType:"dog",
-        color:"red",
-        contactInfo:"2212",
+        age: "42",
+        animalBreed: "Australian Shepherd",
+        animalType: "dog",
+        color: "red",
+        contactInfo: "2212",
         icon: {
-            url:"icons/lost_icon.png"
+            url: "icons/lost_icon.png"
         },
-        id:"_wwkq11fcj",
-        photoUrl:"https://s00.yaplakal.com/pics/pics_original/4/5/5/11106554.jpg",
+        id: "_wwkq11fcj",
+        photoUrl: "https://s00.yaplakal.com/pics/pics_original/4/5/5/11106554.jpg",
         position: {
-            lat:50.98681178914668,
-            lng:31.64168714699099
+            lat: 50.98681178914668,
+            lng: 31.64168714699099
         }
     }
 ];
@@ -36,7 +38,13 @@ export const store = new Vuex.Store({
         currentMarker: null,
         isCanAddMarker: false,
         openAside: false,
-        asideMode: null
+        asideMode: null,
+        menuMode: 'default',
+        isCanAddCenter: false,
+        circle: {
+            center: null,
+            radius: 0
+        }
     },
     mutations: {
         activateMarkerAdding(state, type) {
@@ -51,7 +59,7 @@ export const store = new Vuex.Store({
                 }
             };
         },
-        diactivateMarkerAdding(state) {
+        deactivateMarkerAdding(state) {
             state.isCanAddMarker = false;
         },
         addNewMarker(state, position) {
@@ -91,7 +99,7 @@ export const store = new Vuex.Store({
         setMarkers(state) {
             state.filteredMarkers = state.markers;
         },
-        applyMarkersFilter(state, filters){
+        applyMarkersFilter(state, filters) {
             state.filteredMarkers = filter(state.markers, filters);
         },
         deleteMarker(state) {
@@ -99,13 +107,31 @@ export const store = new Vuex.Store({
             state.filteredMarkers = state.filteredMarkers.filter(i => i.id !== state.currentMarker.id);
         },
         getData(store) {
-            if(!Vue.ls.get('data')){
+            if (!Vue.ls.get('data')) {
                 Vue.ls.set('data', defaultData);
             }
             store.markers = Vue.ls.get('data');
         },
         saveData(store) {
             Vue.ls.set('data', store.markers);
+        },
+        changeMenuMode(state, mode) {
+            state.menuMode = mode;
+        },
+        activateAddingCenter(state) {
+            state.isCanAddCenter = true;
+        },
+        deactivateAddingCenter(state) {
+            state.isCanAddCenter = false;
+        },
+        addCircleCenter(state, center) {
+            state.circle.center = center;
+        },
+        addCircleRadius(state, radius){
+            state.circle.radius = +radius;
+        },
+        filterInsideRadiusMarkers(state, props) {
+            state.filteredMarkers = filter(props.array, props.filters);
         }
     },
     actions: {
@@ -115,8 +141,8 @@ export const store = new Vuex.Store({
         activateMarkerAdding({commit}, type) {
             commit('activateMarkerAdding', type);
         },
-        diactivateMarkerAdding({commit}) {
-            commit('diactivateMarkerAdding');
+        deactivateMarkerAdding({commit}) {
+            commit('deactivateMarkerAdding');
         },
         closeAside({commit}) {
             commit('closeAside');
@@ -140,19 +166,37 @@ export const store = new Vuex.Store({
         setMarkers({commit}) {
             commit('setMarkers');
         },
-        applyMarkersFilter({commit}, filters){
+        applyMarkersFilter({commit}, filters) {
             commit('applyMarkersFilter', filters);
         },
-        deleteMarker({commit}){
+        deleteMarker({commit}) {
             commit('deleteMarker');
             commit('saveData');
             commit('closeAside');
         },
-        getData({commit}){
+        getData({commit}) {
             commit('getData');
         },
-        setData({commit}){
+        setData({commit}) {
             commit('saveData');
+        },
+        changeMenuMode({commit}, mode) {
+            commit('changeMenuMode', mode);
+        },
+        activateAddingCenter({commit}) {
+            commit('activateAddingCenter');
+        },
+        deactivateAddingCenter({commit}) {
+            commit('deactivateAddingCenter');
+        },
+        addCircleCenter({commit}, center) {
+            commit('addCircleCenter', center);
+        },
+        addCircleRadius({commit}, radius) {
+            commit('addCircleRadius', radius);
+        },
+        filterInsideRadiusMarkers({commit}, props) {
+            commit('filterInsideRadiusMarkers', props);
         }
     },
 });
