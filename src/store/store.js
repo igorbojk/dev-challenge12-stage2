@@ -38,7 +38,6 @@ export const store = new Vuex.Store({
         currentMarker: null,
         isCanAddMarker: false,
         openAside: false,
-        asideMode: null,
         menuMode: 'default',
         isCanAddCenter: false,
         circle: {
@@ -50,7 +49,6 @@ export const store = new Vuex.Store({
         activateMarkerAdding(state, type) {
             state.openAside = false;
             state.isCanAddMarker = true;
-            state.asideMode = null;
             state.currentMarker = {
                 id: '_' + Math.random().toString(36).substr(2, 9),
                 type: type,
@@ -69,13 +67,10 @@ export const store = new Vuex.Store({
             };
             state.markers.push(state.currentMarker);
             state.filteredMarkers = state.markers;
-            state.asideMode = 'edit';
-            state.openAside = true;
         },
         closeAside(state) {
             state.openAside = false;
             state.currentMarker = null;
-            state.asideMode = null;
         },
         openAside(state) {
             state.openAside = true;
@@ -92,9 +87,6 @@ export const store = new Vuex.Store({
         cancelMarkerAdding(state) {
             state.markers = state.markers.filter(i => i.id !== state.currentMarker.id);
             state.filteredMarkers = state.filteredMarkers.filter(i => i.id !== state.currentMarker.id);
-        },
-        setAsideMode(state, mode) {
-            state.asideMode = mode;
         },
         setMarkers(state) {
             state.filteredMarkers = state.markers;
@@ -132,11 +124,17 @@ export const store = new Vuex.Store({
         },
         filterInsideRadiusMarkers(state, props) {
             state.filteredMarkers = filter(props.array, props.filters);
+        },
+        resetAllFilters(state) {
+            state.filteredMarkers = state.markers;
+            state.circle.radius = 0;
+            state.circle.center = null;
+            state.isCanAddMarker = false;
         }
     },
     actions: {
-        addNewMarker({commit}, type) {
-            commit('addNewMarker', type)
+        addNewMarker({commit}, position) {
+            commit('addNewMarker', position)
         },
         activateMarkerAdding({commit}, type) {
             commit('activateMarkerAdding', type);
@@ -159,9 +157,6 @@ export const store = new Vuex.Store({
         },
         cancelMarkerAdding({commit}) {
             commit('cancelMarkerAdding');
-        },
-        setAsideMode({commit}, mode) {
-            commit('setAsideMode', mode);
         },
         setMarkers({commit}) {
             commit('setMarkers');
@@ -197,6 +192,9 @@ export const store = new Vuex.Store({
         },
         filterInsideRadiusMarkers({commit}, props) {
             commit('filterInsideRadiusMarkers', props);
+        },
+        resetAllFilters({commit}) {
+            commit('resetAllFilters');
         }
     },
 });

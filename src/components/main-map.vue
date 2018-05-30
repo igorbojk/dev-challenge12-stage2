@@ -40,6 +40,9 @@
             },
             circle(){
                 return this.$store.state.circle;
+            },
+            refs(){
+                return this.$refs;
             }
         },
         methods: {
@@ -56,6 +59,8 @@
                     return;
                 }
                 this.$store.dispatch('addNewMarker', markerPosition);
+                this.$root.$emit('openModal');
+
             },
             setCurrentMarker(marker) {
                 if (this.isCanAddMarker) {
@@ -63,7 +68,6 @@
                 }
                 this.center = marker.position;
                 this.$store.dispatch('setCurrentMarker', marker);
-                this.$store.dispatch('setAsideMode', 'view');
                 this.$store.dispatch('openAside');
             },
         },

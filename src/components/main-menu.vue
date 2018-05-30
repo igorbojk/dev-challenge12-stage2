@@ -1,25 +1,44 @@
 <template>
     <div class="main-menu">
-        <b-collapse id="mainAction" visible>
-            <div class="main-actions">
-                <div class="action-title">
+        <b-card no-body class="mb-1">
+            <b-card-header header-tag="header" class="p-1" role="tab">
+                <button type="button" class="btn btn-success btn-block" v-b-toggle.markerBlock
+                        v-b-popover.hover="'Додати маркер на мапу'" @click="resetAllFilters()">
                     Додати маркер
-                </div>
-                <button type="button" class="btn btn-outline-danger btn-block" @click="deactivateMarkerAdding()"
-                        v-if="isShowCancel()">Скасувати
                 </button>
-                <div class="action-buttons" v-if="isShowActionsButton()">
-                    <button type="button" class="btn btn-outline-danger " @click="activateMarkerAdding('lost')"
-                            :disabled="isCanAddMarker"
-                            v-b-popover.hover="'Після натискання, клікніть на бажане місце на мапі щоб поставити маркер'">
-                        Загублено
+            </b-card-header>
+            <b-collapse id="markerBlock" visible accordion="actions">
+                <div class="filters-block">
+                    <div class="action-title">
+                        Оберіть тип маркеру та клікніть на мапу щоб його встановити
+                    </div>
+                    <button type="button" class="btn btn-outline-danger btn-block" @click="deactivateMarkerAdding()"
+                            v-if="isShowCancel()">Скасувати
                     </button>
-                    <button type="button" class="btn btn-outline-dark " @click="activateMarkerAdding('find')"
-                            :disabled="isCanAddMarker"
-                            v-b-popover.hover="'Після натискання, клікніть на бажане місце на мапі щоб поставити маркер'">
-                        Знайдено
-                    </button>
+                    <div class="action-buttons" v-if="isShowActionsButton()">
+                        <button type="button" class="btn btn-outline-danger " @click="activateMarkerAdding('lost')"
+                                :disabled="isCanAddMarker"
+                                v-b-popover.hover="'Після натискання, клікніть на бажане місце на мапі щоб поставити маркер'">
+                            Загублено
+                        </button>
+                        <button type="button" class="btn btn-outline-dark " @click="activateMarkerAdding('find')"
+                                :disabled="isCanAddMarker"
+                                v-b-popover.hover="'Після натискання, клікніть на бажане місце на мапі щоб поставити маркер'">
+                            Знайдено
+                        </button>
+                    </div>
                 </div>
+            </b-collapse>
+        </b-card>
+
+        <b-card no-body class="mb-1">
+            <b-card-header header-tag="header" class="p-1" role="tab">
+                <button type="button" class="btn btn-success btn-block" v-b-toggle.filterBlock
+                        v-b-popover.hover="'Фільтрвати маркери за критеріями'" @click="resetAllFilters()">
+                    Фільтрувати за критеріями
+                </button>
+            </b-card-header>
+            <b-collapse id="filterBlock" accordion="actions">
                 <div class="filters-block">
                     <div class="action-title">
                         Фільтрувати
@@ -66,54 +85,56 @@
                             Застосувати
                         </button>
                     </div>
-
-                </div>
-            </div>
-        </b-collapse>
-        <div class="radius-filters">
-            <button type="button" class="btn btn-outline-dark btn-block"
-                    v-b-popover.hover="'Знайти співпадіння в радіусі'" v-b-toggle.mainAction.radiusFilters
-                    v-if="menuMode == 'default'" @click="changeMenuMode('radius')">
-                Фільтрувати в радіусі
-            </button>
-            <button type="button" class="btn btn-outline-dark btn-block"
-                    v-b-popover.hover="'Фільтрувати за типом маркеру, видом тварини і т.д.'"
-                    v-b-toggle.mainAction.radiusFilters v-if="menuMode == 'radius'" @click="changeMenuMode('default')">
-                Стандартна фільтрація
-            </button>
-            <b-collapse id="radiusFilters">
-                <button type="button" class="btn btn-success btn-block"
-                        v-b-popover.hover="'Обрати центр радіусу на мапі'" @click="activateAddingCenter()">
-                    Обрати центр
-                </button>
-                <b-form-input v-model="circleRadius" type="text" placeholder="Введіть радіус у метрах" class="mb-3"
-                              v-b-popover.hover="'Радіус кола фільтрації'"></b-form-input>
-                <b-form-select v-model="circleFilters.animalType" class="mb-3"
-                               v-b-popover.hover="'Фільтрувати по виду тварини'">
-                    <option :value="null">Оберіть вид тварини</option>
-                    <option :value="animalType.value" v-for="(animalType, index) of animalTypes" :key="index">
-                        {{animalType.text}}
-                    </option>
-                </b-form-select>
-                <b-form-select v-model="circleFilters.animalBreed" class="mb-3"
-                               v-b-popover.hover="'Фільтрувати по попроді тварини'">
-                    <option :value="null">Оберіть породу тварини</option>
-                    <option :value="animalBreed.value"
-                            v-for="(animalBreed, index) of animalBreeds[circleFilters.animalType]" :key="index">
-                        {{animalBreed.text}}
-                    </option>
-                </b-form-select>
-                <div class="action-buttons">
-                    <button type="button" class="btn btn-danger" v-b-popover.hover="'скинути всі фільтри'">
-                        Скинути
-                    </button>
-                    <button type="button" class="btn btn-primary" v-b-popover.hover="'Застосувати вибрані фільтри'"
-                            @click="applyRadiusFilters()">
-                        Застосувати
-                    </button>
                 </div>
             </b-collapse>
-        </div>
+        </b-card>
+
+        <b-card no-body class="mb-1">
+            <b-card-header header-tag="header" class="p-1" role="tab">
+                <button type="button" class="btn btn-success btn-block" v-b-toggle.radiusFilters
+                        v-b-popover.hover="'Знайти співпадіння маркерів у радіусі'" @click="resetAllFilters()">
+                    Пошук у радіусі
+                </button>
+            </b-card-header>
+            <b-collapse id="radiusFilters" accordion="actions">
+                <div class="filters-block">
+                    <div class="action-title">
+                        Натисніть "обрати центр" та клікніть на мапу щоб обрати центр радіуса.
+                    </div>
+                    <button type="button" class="btn btn-primary btn-block"
+                            v-b-popover.hover="'Натисніть на мапу щоб обрати центр радіусу пошуку'"
+                            @click="activateAddingCenter()">
+                        Обрати центр
+                    </button>
+                    <b-form-input v-model="circleRadius" type="text" placeholder="Введіть радіус у метрах" class="mb-3"
+                                  v-b-popover.hover="'Радіус кола фільтрації'"></b-form-input>
+                    <b-form-select v-model="circleFilters.animalType" class="mb-3"
+                                   v-b-popover.hover="'Фільтрувати по виду тварини'">
+                        <option :value="null">Оберіть вид тварини</option>
+                        <option :value="animalType.value" v-for="(animalType, index) of animalTypes" :key="index">
+                            {{animalType.text}}
+                        </option>
+                    </b-form-select>
+                    <b-form-select v-model="circleFilters.animalBreed" class="mb-3"
+                                   v-b-popover.hover="'Фільтрувати по попроді тварини'">
+                        <option :value="null">Оберіть породу тварини</option>
+                        <option :value="animalBreed.value"
+                                v-for="(animalBreed, index) of animalBreeds[circleFilters.animalType]" :key="index">
+                            {{animalBreed.text}}
+                        </option>
+                    </b-form-select>
+                    <div class="action-buttons">
+                        <button type="button" class="btn btn-danger" v-b-popover.hover="'скинути всі фільтри'" @click="resetAllFilters()">
+                            Скинути
+                        </button>
+                        <button type="button" class="btn btn-primary" v-b-popover.hover="'Застосувати вибрані фільтри'"
+                                @click="applyRadiusFilters()">
+                            Застосувати
+                        </button>
+                    </div>
+                </div>
+            </b-collapse>
+        </b-card>
     </div>
 </template>
 
@@ -192,8 +213,20 @@
                         filteredRadiusArray.push(i)
                     }
                 });
-                this.$store.dispatch('filterInsideRadiusMarkers', {array: filteredRadiusArray, filters: this.circleFilters});
+                this.$store.dispatch('filterInsideRadiusMarkers', {
+                    array: filteredRadiusArray,
+                    filters: this.circleFilters
+                });
             },
+            resetAllFilters(){
+                this.$store.dispatch('resetAllFilters');
+                Object.keys(this.filters).forEach(i => {
+                    this.filters[i] = null
+                });
+                Object.keys(this.circleFilters).forEach(i => {
+                    this.circleFilters[i] = null
+                });
+            }
         },
         data() {
             return {
@@ -220,8 +253,8 @@
 
 <style lang="scss">
     .main-menu {
-        width: 240px;
-        max-width: 240px;
+        width: 250px;
+        max-width: 250px;
         position: absolute;
         top: 16px;
         left: 16px;
@@ -240,7 +273,7 @@
             justify-content: space-between;
         }
         .filters-block {
-            padding-top: 12px;
+            padding: 12px 4px;
         }
         .radius-filters {
             padding-top: 12px;
