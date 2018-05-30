@@ -7,7 +7,7 @@
                     Додати маркер
                 </button>
             </b-card-header>
-            <b-collapse id="markerBlock" visible accordion="actions">
+            <b-collapse id="markerBlock" accordion="actions">
                 <div class="filters-block">
                     <div class="action-title">
                         Оберіть тип маркеру та клікніть на мапу щоб його встановити
