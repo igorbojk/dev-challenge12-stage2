@@ -195,7 +195,7 @@
             applyMarkersFilter() {
                 const filter = Object.assign({}, this.filters);
                 Object.keys(filter).forEach(i => {
-                    if (filter[i] == null) {
+                    if (filter[i] == null || filter[i] == '') {
                         delete filter[i];
                     }
                 });
