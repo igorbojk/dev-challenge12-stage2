@@ -4,15 +4,17 @@
         <div class="container">
             <b-tabs>
                 <b-tab title="Види тварин" active>
-                    <p v-for="(type, index) in animalTypes" :key="index" v-if="animalTypes">
-                        {{type.text}}
-                    </p>
+                    <ul v-if="animalTypes">
+                        <li v-for="(type, index) in animalTypes" :key="index" >
+                            {{type.text}}
+                        </li>
+                    </ul>
                     <b-form-input v-model="newType" type="text" placeholder="Додати колір" class="mb-3"></b-form-input>
                     <button type="button" class="btn btn-outline-primary btn-block" @click="addNewType()">Додати</button>
                 </b-tab>
                 <b-tab title="Породи тварин">
-                    <ul>
-                        <li v-for="(breeds, animal) in animalBreeds" :key="animal" v-if="animalBreeds">
+                    <ul  v-if="animalBreeds">
+                        <li v-for="(breeds, animal) in animalBreeds" :key="animal">
                             {{translates.ANIMAL_TYPES[animal]}}
                             <ul>
                                 <li v-for="(breed, index) in breeds" :key="index">
@@ -31,9 +33,11 @@
                     <button type="button" class="btn btn-outline-primary btn-block" @click="addNewBreed()">Додати</button>
                 </b-tab>
                 <b-tab title="Кольори">
-                    <p v-for="(color, index) in animalColors" :key="index" v-if="animalColors">
-                        {{color.text}}
-                    </p>
+                    <ul v-if="animalColors">
+                        <li v-for="(color, index) in animalColors" :key="index">
+                            {{color.text}}
+                        </li>
+                    </ul>
                     <b-form-input v-model="newColor" type="text" placeholder="Додати колір" class="mb-3"></b-form-input>
                     <button type="button" class="btn btn-outline-primary btn-block" @click="addNewColor()">Додати</button>
 
