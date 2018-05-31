@@ -5,6 +5,7 @@
         <aside-menu></aside-menu>
         <marker-create-modal></marker-create-modal>
         <toast-component></toast-component>
+        <settings></settings>
     </div>
 </template>
 
@@ -13,7 +14,8 @@
     import AsideMenu from './components/aside-menu';
     import MainMenu from './components/main-menu';
     import MarkerCreateModal from "./components/marker-create-modal";
-    import ToastComponent from "./components/toast-component"
+    import ToastComponent from "./components/toast-component";
+    import Settings from "./components/settings";
 
     export default {
 
@@ -23,7 +25,8 @@
             MainMenu,
             MainMap,
             AsideMenu,
-            ToastComponent
+            ToastComponent,
+            Settings
         }
     }
 </script>

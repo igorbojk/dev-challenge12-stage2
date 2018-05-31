@@ -8,12 +8,14 @@ export const TRANSLATES = {
         'dog': 'Собака',
         'parrot': 'Папуга',
     },
-    DOG_BREEDS: {
-        'Australian Shepherd': 'Австралійська вівчарка',
-        'Alabay': 'Алабай',
-        'Dalmatian': 'Далматин',
-        'Yorkshire Terrier\n': 'Йоркширський тер\'єр\n',
-        'St. Bernard': 'Сенбернар'
+    BREEDS: {
+        'dog': {
+            'Australian Shepherd': 'Австралійська вівчарка',
+            'Alabay': 'Алабай',
+            'Dalmatian': 'Далматин',
+            'Yorkshire Terrier\n': 'Йоркширський тер\'єр\n',
+            'St. Bernard': 'Сенбернар'
+        }
     },
     COLORS: {
         'red': 'Червоний',

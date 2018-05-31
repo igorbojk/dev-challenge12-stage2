@@ -12,7 +12,7 @@
                 </div>
                 <div class="mb-3">
                     <div class="label">Порода тварини</div>
-                     {{TRANSLATES.DOG_BREEDS[currentMarker.animalBreed]}}
+                     {{TRANSLATES.BREEDS[currentMarker.animalType][currentMarker.animalBreed]}}
                 </div>
                 <div class="mb-3">
                     <div class="label">Вік тварини</div>
@@ -40,10 +40,6 @@
 
 <script>
     import {TRANSLATES} from '../const/translates.js';
-    import {ANIMAL_TYPES} from '../const/animalTypes.js';
-    import {ANIMAL_BREEDS} from '../const/animalBreeds.js';
-    import {ANIMAL_COLORS} from '../const/animalColors.js';
-
 
     export default {
         name: 'aside-menu',
@@ -56,6 +52,15 @@
             },
             asideMode() {
                 return this.$store.state.asideMode;
+            },
+            animalTypes() {
+                return this.$store.state.settings.ANIMAL_TYPES;
+            },
+            animalBreeds() {
+                return this.$store.state.settings.ANIMAL_BREEDS;
+            },
+            animalColors() {
+                return this.$store.state.settings.ANIMAL_COLORS;
             }
         },
         methods: {
@@ -82,9 +87,6 @@
         data() {
             return {
                 TRANSLATES: TRANSLATES,
-                animalTypes: ANIMAL_TYPES,
-                animalBreeds: ANIMAL_BREEDS,
-                animalColors: ANIMAL_COLORS,
                 markerOptions: {
                     animalType: null,
                     animalBreed: null,

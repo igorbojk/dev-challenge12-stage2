@@ -51,14 +51,14 @@
                         </option>
                     </b-form-select>
                     <b-form-select v-model="filters.animalType" class="mb-3"
-                                   v-b-popover.hover="'Фільтрувати по виду тварини'">
+                                   v-b-popover.hover="'Фільтрувати по виду тварини'" v-if="animalTypes">
                         <option :value="null">Оберіть вид тварини</option>
                         <option :value="animalType.value" v-for="(animalType, index) of animalTypes" :key="index">
                             {{animalType.text}}
                         </option>
                     </b-form-select>
                     <b-form-select v-model="filters.animalBreed" class="mb-3"
-                                   v-b-popover.hover="'Фільтрувати по попроді тварини'">
+                                   v-b-popover.hover="'Фільтрувати по попроді тварини'" v-if="animalBreeds">
                         <option :value="null">Оберіть породу тварини</option>
                         <option :value="animalBreed.value"
                                 v-for="(animalBreed, index) of animalBreeds[filters.animalType]" :key="index">
@@ -68,7 +68,7 @@
                     <b-form-input v-model="filters.age" type="text" placeholder="Вік тварини" class="mb-3"
                                   v-b-popover.hover="'Фільтрувати по віку тварини'"></b-form-input>
                     <b-form-select v-model="filters.color" class="mb-3"
-                                   v-b-popover.hover="'Фільтрувати по кольору тварини'">
+                                   v-b-popover.hover="'Фільтрувати по кольору тварини'" v-if="animalColors">
                         <option :value="null">Оберіть колір тварини</option>
                         <option :value="animalColor.value"
                                 v-for="(animalColor, index) of animalColors" :key="index">
@@ -111,14 +111,14 @@
                                       class="mb-3"
                                       v-b-popover.hover="'Радіус кола фільтрації у метрах'" required></b-form-input>
                         <b-form-select v-model="circleFilters.animalType" class="mb-3"
-                                       v-b-popover.hover="'Фільтрувати по виду тварини'" required>
+                                       v-b-popover.hover="'Фільтрувати по виду тварини'" required v-if="animalTypes">
                             <option :value="null">Оберіть вид тварини</option>
                             <option :value="animalType.value" v-for="(animalType, index) of animalTypes" :key="index">
                                 {{animalType.text}}
                             </option>
                         </b-form-select>
                         <b-form-select v-model="circleFilters.animalBreed" class="mb-3"
-                                       v-b-popover.hover="'Фільтрувати по попроді тварини'" required>
+                                       v-b-popover.hover="'Фільтрувати по попроді тварини'" required v-if="animalBreeds">
                             <option :value="null">Оберіть породу тварини</option>
                             <option :value="animalBreed.value"
                                     v-for="(animalBreed, index) of animalBreeds[circleFilters.animalType]" :key="index">
@@ -139,15 +139,16 @@
                 </b-form>
             </b-collapse>
         </b-card>
+        <button type="button" class="btn btn-dark btn-block"
+                v-b-popover.hover="'Редагувати переліки тварин, порід, кольорів, і так далі'" @click="toggleOpenSettings()">
+            Редагувати переліки
+        </button>
     </div>
 </template>
 
 <script>
     import {gmapApi} from 'vue2-google-maps';
     import {MARKER_TYPES} from '../const/markerTypes.js';
-    import {ANIMAL_TYPES} from '../const/animalTypes.js';
-    import {ANIMAL_BREEDS} from '../const/animalBreeds.js';
-    import {ANIMAL_COLORS} from '../const/animalColors.js';
 
     export default {
         name: 'main-menu',
@@ -171,6 +172,15 @@
                 return this.$store.state.circle;
             },
             google: gmapApi,
+            animalTypes() {
+                return this.$store.state.settings.ANIMAL_TYPES;
+            },
+            animalBreeds() {
+                return this.$store.state.settings.ANIMAL_BREEDS;
+            },
+            animalColors() {
+                return this.$store.state.settings.ANIMAL_COLORS;
+            }
         },
         methods: {
             isShowCancel() {
@@ -240,14 +250,14 @@
                     this.circleFilters[i] = null
                 });
                 this.circleRadius = 0;
+            },
+            toggleOpenSettings(){
+                this.$store.dispatch('toggleOpenSettings');
             }
         },
         data() {
             return {
                 markerTypes: MARKER_TYPES,
-                animalTypes: ANIMAL_TYPES,
-                animalBreeds: ANIMAL_BREEDS,
-                animalColors: ANIMAL_COLORS,
                 filters: {
                     type: null,
                     animalType: null,

@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import VueLocalStorage from 'vue-ls';
+import {MARKERS} from '../const/defaultData';
+import {SETTINGS} from '../const/defaultData'
 
 var filter = require('lodash.filter');
 Vue.use(Vuex);
@@ -9,28 +11,11 @@ const options = {
     namespace: 'dev_challenge__'
 };
 
+const defaulMarkers = MARKERS;
+const defaultSettings = SETTINGS;
+
 Vue.use(VueLocalStorage, options);
 
-
-const defaultData = [
-    {
-        type: 'lost',
-        age: "42",
-        animalBreed: "Australian Shepherd",
-        animalType: "dog",
-        color: "red",
-        contactInfo: "2212",
-        icon: {
-            url: "icons/lost_icon.png"
-        },
-        id: "_wwkq11fcj",
-        photoUrl: "https://s00.yaplakal.com/pics/pics_original/4/5/5/11106554.jpg",
-        position: {
-            lat: 50.98681178914668,
-            lng: 31.64168714699099
-        }
-    }
-];
 export const store = new Vuex.Store({
     state: {
         markers: [],
@@ -43,7 +28,9 @@ export const store = new Vuex.Store({
         circle: {
             center: null,
             radius: 0
-        }
+        },
+        isOpenSettings: false,
+        settings: {}
     },
     mutations: {
         activateMarkerAdding(state, type) {
@@ -100,9 +87,14 @@ export const store = new Vuex.Store({
         },
         getData(store) {
             if (!Vue.ls.get('data')) {
-                Vue.ls.set('data', defaultData);
+                Vue.ls.set('data', defaulMarkers);
             }
             store.markers = Vue.ls.get('data');
+
+            if (!Vue.ls.get('settings')) {
+                Vue.ls.set('settings', defaultSettings);
+            }
+            store.settings = Vue.ls.get('settings');
         },
         saveData(store) {
             Vue.ls.set('data', store.markers);
@@ -130,6 +122,9 @@ export const store = new Vuex.Store({
             state.circle.radius = 0;
             state.circle.center = null;
             state.isCanAddMarker = false;
+        },
+        toggleOpenSettings(state){
+            state.isOpenSettings = !state.isOpenSettings;
         }
     },
     actions: {
@@ -195,6 +190,9 @@ export const store = new Vuex.Store({
         },
         resetAllFilters({commit}) {
             commit('resetAllFilters');
+        },
+        toggleOpenSettings({commit}){
+            commit('toggleOpenSettings');
         }
     },
 });

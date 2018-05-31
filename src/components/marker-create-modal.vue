@@ -14,7 +14,7 @@
                         {{animalType.text}}
                     </option>
                 </b-form-select>
-                <b-form-select v-model="markerOptions.animalBreed" class="mb-3" required>
+                <b-form-select v-model="markerOptions.animalBreed" class="mb-3" required v-if="animalBreeds">
                     <option :value="null">Оберіть породу тварини</option>
                     <option :value="animalBreed.value"
                             v-for="(animalBreed, index) of animalBreeds[markerOptions.animalType]" :key="index">
@@ -54,9 +54,6 @@
 
 <script>
     import {TRANSLATES} from '../const/translates.js';
-    import {ANIMAL_TYPES} from '../const/animalTypes.js';
-    import {ANIMAL_BREEDS} from '../const/animalBreeds.js';
-    import {ANIMAL_COLORS} from '../const/animalColors.js';
 
     export default {
         name: "marker-create-modal",
@@ -69,6 +66,15 @@
             },
             asideMode() {
                 return this.$store.state.asideMode;
+            },
+            animalTypes() {
+                return this.$store.state.settings.ANIMAL_TYPES;
+            },
+            animalBreeds() {
+                return this.$store.state.settings.ANIMAL_BREEDS;
+            },
+            animalColors() {
+                return this.$store.state.settings.ANIMAL_COLORS;
             }
         },
         mounted(){
@@ -100,9 +106,6 @@
         data() {
             return {
                 TRANSLATES: TRANSLATES,
-                animalTypes: ANIMAL_TYPES,
-                animalBreeds: ANIMAL_BREEDS,
-                animalColors: ANIMAL_COLORS,
                 markerOptions: {
                     animalType: null,
                     animalBreed: null,
