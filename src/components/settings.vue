@@ -2,7 +2,6 @@
     <section class="settings" v-bind:class="{active: isOpenSettings}">
         <div class="close-btn" @click="toggleOpenSettings()"></div>
         <div class="container">
-            <h1>Редагування переліківи тварин, порід, кольорів</h1>
             <b-tabs>
                 <b-tab title="Види тварин" active>
                     <p v-for="(type, index) in animalTypes" :key="index" v-if="animalTypes">
