@@ -24,7 +24,9 @@
                 </div>
                 <div class="mb-3">
                     <div class="label">Контактна інформація</div>
-                    {{currentMarker.contactInfo}}
+                    <div class="contact-info">
+                        {{currentMarker.contactInfo}}
+                    </div>
                 </div>
             </div>
             <div class="aside-footer">
@@ -139,6 +141,9 @@
             flex: 1 1 auto;
             overflow: auto;
             padding: 8px;
+            .contact-info{
+                white-space: pre-line;
+            }
             .animal-photo {
                 width: 100%;
                 height: auto;

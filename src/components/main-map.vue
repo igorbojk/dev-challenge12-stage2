@@ -3,7 +3,7 @@
         <GmapMap
                 ref="mapRef"
                 :center="center"
-                :zoom="7"
+                :zoom="12"
                 style="width: 100%; height: 100%"
                 :options="{disableDefaultUI:true}"
                 @click="geolocation($event)"
@@ -15,7 +15,7 @@
                     :clickable="true"
                     @click="setCurrentMarker(marker)"
                     :icon="marker.icon"
-                    :title="`${translates.ANIMAL_TYPES[marker.animalType]}(${translates.BREEDS[marker.animalType][marker.animalBreed]})`"
+                    :title="marker.animalType && marker.animalBreed ? `${translates.ANIMAL_TYPES[marker.animalType]}(${translates.BREEDS[marker.animalType][marker.animalBreed]})` : ''"
             />
             <GmapCircle
                     v-if="circle.center"
@@ -74,7 +74,7 @@
         },
         data() {
             return {
-                center: {lat: 50.412739882464216, lng: 30.53206800636599}
+                center: {lat: 50.466459, lng: 30.520975}
             }
         },
         mounted() {

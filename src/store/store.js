@@ -69,7 +69,6 @@ export const store = new Vuex.Store({
             const oldMarker = state.markers.find(i => i.id == state.currentMarker.id);
             Object.assign(oldMarker, markerOptions);
             state.currentMarker = null;
-
         },
         cancelMarkerAdding(state) {
             state.markers = state.markers.filter(i => i.id !== state.currentMarker.id);
