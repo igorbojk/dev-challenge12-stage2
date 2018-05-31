@@ -15,6 +15,7 @@
                     :clickable="true"
                     @click="setCurrentMarker(marker)"
                     :icon="marker.icon"
+                    :title="`${translates.ANIMAL_TYPES[marker.animalType]}(${translates.BREEDS[marker.animalType][marker.animalBreed]})`"
             />
             <GmapCircle
                     v-if="circle.center"
@@ -41,6 +42,9 @@
             circle() {
                 return this.$store.state.circle;
             },
+            translates() {
+                return this.$store.state.settings.TRANSLATES;
+            }
         },
         methods: {
             geolocation(event) {
