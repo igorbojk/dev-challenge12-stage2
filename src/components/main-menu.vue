@@ -97,42 +97,46 @@
                 </button>
             </b-card-header>
             <b-collapse id="radiusFilters" accordion="actions">
-                <div class="filters-block">
-                    <div class="action-title">
-                        Натисніть "обрати центр" та клікніть на мапу щоб обрати центр радіуса.
-                    </div>
-                    <button type="button" class="btn btn-primary btn-block"
-                            v-b-popover.hover="'Натисніть на мапу щоб обрати центр радіусу пошуку'"
-                            @click="activateAddingCenter()">
-                        Обрати центр
-                    </button>
-                    <b-form-input v-model="circleRadius" type="text" placeholder="Введіть радіус у метрах" class="mb-3"
-                                  v-b-popover.hover="'Радіус кола фільтрації'"></b-form-input>
-                    <b-form-select v-model="circleFilters.animalType" class="mb-3"
-                                   v-b-popover.hover="'Фільтрувати по виду тварини'">
-                        <option :value="null">Оберіть вид тварини</option>
-                        <option :value="animalType.value" v-for="(animalType, index) of animalTypes" :key="index">
-                            {{animalType.text}}
-                        </option>
-                    </b-form-select>
-                    <b-form-select v-model="circleFilters.animalBreed" class="mb-3"
-                                   v-b-popover.hover="'Фільтрувати по попроді тварини'">
-                        <option :value="null">Оберіть породу тварини</option>
-                        <option :value="animalBreed.value"
-                                v-for="(animalBreed, index) of animalBreeds[circleFilters.animalType]" :key="index">
-                            {{animalBreed.text}}
-                        </option>
-                    </b-form-select>
-                    <div class="action-buttons">
-                        <button type="button" class="btn btn-danger" v-b-popover.hover="'скинути всі фільтри'" @click="resetAllFilters()">
-                            Скинути
+                <b-form @submit="applyRadiusFilters">
+                    <div class="filters-block">
+                        <div class="action-title">
+                            Натисніть "обрати центр" та клікніть на мапу щоб обрати центр радіуса.
+                        </div>
+                        <button type="button" class="btn btn-primary btn-block"
+                                v-b-popover.hover="'Натисніть на мапу щоб обрати центр радіусу пошуку'"
+                                @click="activateAddingCenter()">
+                            Обрати центр
                         </button>
-                        <button type="button" class="btn btn-primary" v-b-popover.hover="'Застосувати вибрані фільтри'"
-                                @click="applyRadiusFilters()">
-                            Застосувати
-                        </button>
+                        <b-form-input v-model="circleRadius" type="text" placeholder="Введіть радіус у метрах"
+                                      class="mb-3"
+                                      v-b-popover.hover="'Радіус кола фільтрації у метрах'" required></b-form-input>
+                        <b-form-select v-model="circleFilters.animalType" class="mb-3"
+                                       v-b-popover.hover="'Фільтрувати по виду тварини'" required>
+                            <option :value="null">Оберіть вид тварини</option>
+                            <option :value="animalType.value" v-for="(animalType, index) of animalTypes" :key="index">
+                                {{animalType.text}}
+                            </option>
+                        </b-form-select>
+                        <b-form-select v-model="circleFilters.animalBreed" class="mb-3"
+                                       v-b-popover.hover="'Фільтрувати по попроді тварини'" required>
+                            <option :value="null">Оберіть породу тварини</option>
+                            <option :value="animalBreed.value"
+                                    v-for="(animalBreed, index) of animalBreeds[circleFilters.animalType]" :key="index">
+                                {{animalBreed.text}}
+                            </option>
+                        </b-form-select>
+                        <div class="action-buttons">
+                            <button type="button" class="btn btn-danger" v-b-popover.hover="'скинути всі фільтри'"
+                                    @click="resetAllFilters()" :disabled="!storeCircle.center">
+                                Скинути
+                            </button>
+                            <button type="submit" class="btn btn-primary"
+                                    v-b-popover.hover="'Застосувати вибрані фільтри'" :disabled="!storeCircle.center">
+                                Застосувати
+                            </button>
+                        </div>
                     </div>
-                </div>
+                </b-form>
             </b-collapse>
         </b-card>
     </div>
@@ -163,7 +167,7 @@
             filteredMarkers() {
                 return this.$store.state.filteredMarkers;
             },
-            circleTest() {
+            storeCircle() {
                 return this.$store.state.circle;
             },
             google: gmapApi,
@@ -203,10 +207,11 @@
             activateAddingCenter() {
                 this.$store.dispatch('activateAddingCenter');
             },
-            applyRadiusFilters() {
+            applyRadiusFilters(event) {
+                event.preventDefault();
                 this.$store.dispatch('addCircleRadius', this.circleRadius);
                 this.$store.dispatch('deactivateAddingCenter');
-                const circleCenter = this.circleTest.center;
+                const circleCenter = this.storeCircle.center;
                 const circleLat = new this.google.maps.LatLng(circleCenter.lat, circleCenter.lng);
                 let filteredRadiusArray = [];
                 this.markers.forEach(i => {
@@ -217,13 +222,16 @@
                         filteredRadiusArray.push(i)
                     }
                 });
+                if (!filteredRadiusArray.find(i => i.type == 'lost') || !filteredRadiusArray.find(i => i.type == 'find')) {
+                    filteredRadiusArray = [];
+                }
                 this.$store.dispatch('filterInsideRadiusMarkers', {
                     array: filteredRadiusArray,
                     filters: this.circleFilters
                 });
-                this.$root.$emit('showToast', `Знайдено: ${this.filteredMarkers.length}`)
+                this.$root.$emit('showToast', `Знайдено співпадінь: ${this.filteredMarkers.length}`)
             },
-            resetAllFilters(){
+            resetAllFilters() {
                 this.$store.dispatch('resetAllFilters');
                 Object.keys(this.filters).forEach(i => {
                     this.filters[i] = null
@@ -231,6 +239,7 @@
                 Object.keys(this.circleFilters).forEach(i => {
                     this.circleFilters[i] = null
                 });
+                this.circleRadius = 0;
             }
         },
         data() {
@@ -246,7 +255,7 @@
                     animalBreed: null,
                     color: null
                 },
-                circleRadius: 0,
+                circleRadius: null,
                 circleFilters: {
                     animalType: null,
                     animalBreed: null
