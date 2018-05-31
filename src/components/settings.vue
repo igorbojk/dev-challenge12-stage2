@@ -123,6 +123,10 @@
         &.active {
             top: 0;
         }
+        .tab-content{
+            overflow: auto;
+            max-height: calc(100vh - 68px);
+        }
         .close-btn {
             width: 48px;
             height: 48px;
