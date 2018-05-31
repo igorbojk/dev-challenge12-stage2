@@ -8,11 +8,13 @@
                     <p v-for="(type, index) in animalTypes" :key="index" v-if="animalTypes">
                         {{type.text}}
                     </p>
+                    <b-form-input v-model="newType" type="text" placeholder="Додати колір" class="mb-3"></b-form-input>
+                    <button type="button" class="btn btn-outline-primary btn-block" @click="addNewType()">Додати</button>
                 </b-tab>
                 <b-tab title="Породи тварин">
                     <ul>
                         <li v-for="(breeds, animal) in animalBreeds" :key="animal" v-if="animalBreeds">
-                            {{TRANSLATES.ANIMAL_TYPES[animal]}}
+                            {{translates.ANIMAL_TYPES[animal]}}
                             <ul>
                                 <li v-for="(breed, index) in breeds" :key="index">
                                     {{breed.text}}
@@ -20,11 +22,22 @@
                             </ul>
                         </li>
                     </ul>
+                    <b-form-select v-model="animalType" class="mb-3" required v-if="animalTypes">
+                        <option :value="null">Оберіть вид тварини</option>
+                        <option :value="animalType.value" v-for="(animalType, index) of animalTypes" :key="index">
+                            {{animalType.text}}
+                        </option>
+                    </b-form-select>
+                    <b-form-input v-model="newBreed" type="text" placeholder="Додати породу" class="mb-3"></b-form-input>
+                    <button type="button" class="btn btn-outline-primary btn-block" @click="addNewBreed()">Додати</button>
                 </b-tab>
                 <b-tab title="Кольори">
                     <p v-for="(color, index) in animalColors" :key="index" v-if="animalColors">
                         {{color.text}}
                     </p>
+                    <b-form-input v-model="newColor" type="text" placeholder="Додати колір" class="mb-3"></b-form-input>
+                    <button type="button" class="btn btn-outline-primary btn-block" @click="addNewColor()">Додати</button>
+
                 </b-tab>
             </b-tabs>
         </div>
@@ -34,7 +47,6 @@
 </template>
 
 <script>
-    import {TRANSLATES} from '../const/translates.js';
     export default {
         name: "settings",
         computed: {
@@ -49,16 +61,47 @@
             },
             animalColors() {
                 return this.$store.state.settings.ANIMAL_COLORS;
+            },
+            translates() {
+                return this.$store.state.settings.TRANSLATES;
             }
         },
         methods: {
             toggleOpenSettings() {
                 this.$store.dispatch('toggleOpenSettings');
+            },
+            addNewColor() {
+                const color = {
+                    value: '_' + Math.random().toString(36).substr(2, 9),
+                    text: this.newColor
+                };
+                this.$store.dispatch('addNewColor', color);
+                this.newColor = null;
+            },
+            addNewType() {
+                const newType = {
+                    value: '_' + Math.random().toString(36).substr(2, 9),
+                    text: this.newType
+                };
+                this.$store.dispatch('addNewType', newType);
+                this.newType = null;
+            },
+            addNewBreed() {
+                const newBreed = {
+                    value: '_' + Math.random().toString(36).substr(2, 9),
+                    text: this.newBreed
+                };
+                this.$store.dispatch('addNewBreed', {breed: newBreed, type: this.animalType});
+                this.newBreed = null;
+                this.animalType = null;
             }
         },
-        data(){
+        data() {
             return {
-                TRANSLATES: TRANSLATES,
+                newColor: null,
+                newType: null,
+                animalType: null,
+                newBreed: null
             }
         }
     }
@@ -106,13 +149,13 @@
                 transform: rotate(180deg);
             }
         }
-        .container{
+        .container {
             margin-top: 16px;
-            h1{
+            h1 {
                 margin-bottom: 48px;
             }
         }
-        .tab-pane{
+        .tab-pane {
             margin-top: 48px;
         }
     }

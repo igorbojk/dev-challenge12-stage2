@@ -2,17 +2,17 @@
     <div class="aside" v-bind:class="{ active: openAside}">
         <div class="flex-container" v-if="currentMarker">
             <div class="aside-header">
-                {{TRANSLATES.MARKER_TYPES[currentMarker.type]}} !
+                {{translates.MARKER_TYPES[currentMarker.type]}} !
             </div>
-            <div class="aside-body">
+            <div class="aside-body" v-if="currentMarker.animalType">
                 <img :src="currentMarker.photoUrl" alt="" class="animal-photo">
                 <div class="mb-3">
                     <div class="label">Вид тварини</div>
-                    {{TRANSLATES.ANIMAL_TYPES[currentMarker.animalType]}}
+                    {{translates.ANIMAL_TYPES[currentMarker.animalType]}}
                 </div>
                 <div class="mb-3">
                     <div class="label">Порода тварини</div>
-                     {{TRANSLATES.BREEDS[currentMarker.animalType][currentMarker.animalBreed]}}
+                     {{translates.BREEDS[currentMarker.animalType][currentMarker.animalBreed]}}
                 </div>
                 <div class="mb-3">
                     <div class="label">Вік тварини</div>
@@ -20,7 +20,7 @@
                 </div>
                 <div class="mb-3">
                     <div class="label">Колір тварини</div>
-                    {{TRANSLATES.COLORS[currentMarker.color]}}
+                    {{translates.ANIMAL_COLORS[currentMarker.color]}}
                 </div>
                 <div class="mb-3">
                     <div class="label">Контактна інформація</div>
@@ -39,7 +39,6 @@
 </template>
 
 <script>
-    import {TRANSLATES} from '../const/translates.js';
 
     export default {
         name: 'aside-menu',
@@ -61,7 +60,11 @@
             },
             animalColors() {
                 return this.$store.state.settings.ANIMAL_COLORS;
+            },
+            translates() {
+                return this.$store.state.settings.TRANSLATES;
             }
+
         },
         methods: {
             cancel() {
@@ -86,7 +89,6 @@
         },
         data() {
             return {
-                TRANSLATES: TRANSLATES,
                 markerOptions: {
                     animalType: null,
                     animalBreed: null,

@@ -125,6 +125,22 @@ export const store = new Vuex.Store({
         },
         toggleOpenSettings(state){
             state.isOpenSettings = !state.isOpenSettings;
+        },
+        addNewColor(state, color) {
+            state.settings.ANIMAL_COLORS.push(color);
+            state.settings.TRANSLATES.ANIMAL_COLORS[color.value] = color.text;
+            Vue.ls.set('settings', state.settings);
+        },
+        addNewType(state, type) {
+            state.settings.ANIMAL_TYPES.push(type);
+            state.settings.ANIMAL_BREEDS[type.value] = [];
+            state.settings.TRANSLATES.ANIMAL_TYPES[type.value] = type.text;
+            Vue.ls.set('settings', state.settings);
+        },
+        addNewBreed(state, payload){
+            state.settings.ANIMAL_BREEDS[payload.type].push(payload.breed);
+            state.settings.TRANSLATES.BREEDS[payload.type][payload.breed.value] = payload.breed.text;
+            Vue.ls.set('settings', state.settings);
         }
     },
     actions: {
@@ -193,6 +209,15 @@ export const store = new Vuex.Store({
         },
         toggleOpenSettings({commit}){
             commit('toggleOpenSettings');
+        },
+        addNewColor({commit}, color) {
+            commit('addNewColor', color);
+        },
+        addNewType({commit}, type){
+            commit('addNewType', type);
+        },
+        addNewBreed({commit}, payload){
+            commit('addNewBreed', payload)
         }
     },
 });

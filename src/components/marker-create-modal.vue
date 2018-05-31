@@ -4,7 +4,7 @@
             <div class="aside-header" v-if="currentMarker">
                 <span>Тип маркеру: </span>
                 <span>
-                   {{TRANSLATES.MARKER_TYPES[currentMarker.type]}}
+                   {{translates.MARKER_TYPES[currentMarker.type]}}
                 </span>
             </div>
             <div class="aside-body">
@@ -53,7 +53,6 @@
 </template>
 
 <script>
-    import {TRANSLATES} from '../const/translates.js';
 
     export default {
         name: "marker-create-modal",
@@ -75,6 +74,9 @@
             },
             animalColors() {
                 return this.$store.state.settings.ANIMAL_COLORS;
+            },
+            translates() {
+                return this.$store.state.settings.TRANSLATES;
             }
         },
         mounted(){
@@ -105,7 +107,6 @@
         },
         data() {
             return {
-                TRANSLATES: TRANSLATES,
                 markerOptions: {
                     animalType: null,
                     animalBreed: null,
