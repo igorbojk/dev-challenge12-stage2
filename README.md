@@ -2,8 +2,8 @@
 
 # Builded application in 'dist' folder
 
-## npm i for install dependencies
+## 'npm i' for install dependencies
 
-## npm run serve for run in dev mode
+## 'npm run serve' for run in dev mode
 
-## npm run build for building app
+## 'npm run build' for building app
